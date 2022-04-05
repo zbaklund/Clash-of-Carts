@@ -6,6 +6,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int health = 100;
+    public HealthBar healthBar;
     void OnCollisionEnter(Collision col) {
         if (true) { // Need to modify to be only happen on collision with player.
             health -= 10;
@@ -14,4 +15,6 @@ public class Health : MonoBehaviour
             } 
         }
     }
+
+
 }
