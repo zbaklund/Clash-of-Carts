@@ -1,4 +1,0 @@
-#Sun Apr 03 21:36:51 CDT 2022
-base.0=/home/wireman/Documents/CS579/Clash-of-Carts/VR_Tutorial/Temp/gradleOut/launcher/build/intermediates/dex/release/mergeDexRelease/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
