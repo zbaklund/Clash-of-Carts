@@ -161,6 +161,10 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 11400000, guid: c43457555a9573b458982690875cdd61, type: 2}
+  - {fileID: -3465435050321377293, guid: 0c5c074cd2f1a2340a7f4cdc7da7e635, type: 2}
+  - {fileID: 0}
+  - {fileID: 6810470494800973019, guid: 64ff22cf4a361c74bbc41d00d6e66d5c, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -178,7 +182,6 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DefaultCompany.VR_Tutorial
     Standalone: com.DefaultCompany.VR-Tutorial
   buildNumber:
     Standalone: 0
@@ -799,7 +802,7 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 1
+  activeInputHandler: 2
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
