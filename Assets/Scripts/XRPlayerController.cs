@@ -171,8 +171,9 @@ public class XRPlayerController : MonoBehaviour
             }
         }
 
-       transform.Translate(Vector3.forward * current_speed * Time.deltaTime);
-       transform.rotation = Quaternion.Euler(averageDirection.x * rotationSpeed, 0f, averageDirection.z * rotationSpeed);
+        transform.Translate(averageDirection * current_speed * Time.deltaTime);
+        //transform.Translate(Vector3.forward * current_speed * Time.deltaTime);
+       //transform.rotation = Quaternion.Euler(averageDirection.x * rotationSpeed, 0f, averageDirection.z * rotationSpeed);
        //Camera.rotation = Quaternion.Euler(averageDirection.x * rotationSpeed, 0f, 0f);
        //transform.Rotate(averageDirection * rotationSpeed * Time.deltaTime);
 
