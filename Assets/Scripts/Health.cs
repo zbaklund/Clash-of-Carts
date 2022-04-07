@@ -16,5 +16,14 @@ public class Health : MonoBehaviour
         }
     }
 
+    // Eventually copy this into the playerController
+    void updateInventory(PowerUpTypes type) {
+        if (type == PowerUpTypes.speedBoost) {
+            // Set speed boost
+        } else if (type == PowerUpTypes.invincible) {
+            // Set invincibility
+        }
+    }
+
 
 }
