@@ -10,16 +10,19 @@ public class XRPlayerController : MonoBehaviour
     [Header("Behaviour Options")]
 
     [SerializeField]
-    private float speed = 10.0f;
+    private float maxSpeed = 500.0f;
 
     [SerializeField]
-    private float jumpForce = 250.0f;
+    private float accelrateInterval = 2.0f;
 
     [SerializeField]
-    private XRNode controllerNode = XRNode.LeftHand;
+    private float brakingInterval = 2.0f;
 
     [SerializeField]
-    private bool checkForGroundOnJump = true;
+    private float neutralInterval = 1.0f;
+
+    [SerializeField]
+    private float rotationSpeed = 2f;
 
     [Header("Capsule Collider Options")]
     [SerializeField]
@@ -34,7 +37,14 @@ public class XRPlayerController : MonoBehaviour
     [SerializeField]
     private CapsuleDirection capsuleDirection = CapsuleDirection.YAxis;
 
-    private InputDevice controller;
+    [Header("Camera")]
+    public Transform Camera;
+
+    [Header("XR Controller Inputs")]
+
+
+    private InputDevice LeftController;
+    private InputDevice RightController;
 
     private bool isGrounded;
 
@@ -45,6 +55,10 @@ public class XRPlayerController : MonoBehaviour
     private CapsuleCollider capsuleCollider;
 
     private List<InputDevice> devices = new List<InputDevice>();
+
+    private float current_speed = 0f;
+
+    private Vector3 current_direction = Vector3.zero;
 
     public enum CapsuleDirection
     {
@@ -67,72 +81,118 @@ public class XRPlayerController : MonoBehaviour
 
     void Start()
     {
-        GetDevice();
+        GetDevices();
     }
 
-    private void GetDevice()
+    private void GetDevices()
     {
-        InputDevices.GetDevicesAtXRNode(controllerNode, devices);
-        controller = devices.FirstOrDefault();
+        var leftHandDevices = new List<UnityEngine.XR.InputDevice>();
+        UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftHandDevices);
+
+        if(leftHandDevices.Count == 1)
+        {
+            LeftController = leftHandDevices[0];
+            Debug.Log(string.Format("Device name '{0}' with role '{1}'", LeftController.name, LeftController.characteristics.ToString()));
+        }
+        else if(leftHandDevices.Count > 1)
+        {
+            Debug.Log("Found more than one left hand!");
+        }
+
+        var rightHandDevices = new List<UnityEngine.XR.InputDevice>();
+        UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightHandDevices);
+
+        if(leftHandDevices.Count == 1)
+        {
+            RightController = rightHandDevices[0];
+            Debug.Log(string.Format("Device name '{0}' with role '{1}'", RightController.name, RightController.characteristics.ToString()));
+        }
+        else if(leftHandDevices.Count > 1)
+        {
+            Debug.Log("Found more than one left hand!");
+        }
     }
 
     void Update()
     {
-        if (controller == null)
+        if (LeftController == null || RightController == null)
         {
-            GetDevice();
+            GetDevices();
         }
 
         UpdateMovement();
 
-        //UpdateJump(controller);
     }
 
     private void UpdateMovement()
     {
-        Vector2 primary2dValue;
 
-        InputFeatureUsage<Vector2> primary2DVector = CommonUsages.primary2DAxis;
+        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out Quaternion rightRotation);
+        Vector3 rightDirection = rightRotation * Vector3.forward;
+        //RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 rightPosition);
 
-        if (controller.TryGetFeatureValue(primary2DVector, out primary2dValue) && primary2dValue != Vector2.zero)
+        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out Quaternion leftRotation);
+        Vector3 leftDirection = leftRotation * Vector3.forward;
+        //LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 leftPosition);
+
+        Vector3 averageDirection = (rightDirection + leftDirection) / 2;
+        averageDirection.y = 0;
+        averageDirection.Normalize();
+
+        //Vector3 turnDirection = (averageDirection - current_direction) 
+
+        bool triggerValue;
+
+        // Left trigger pull, deccelerate to 0
+        if (LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerValue) && triggerValue)
         {
-            Debug.Log("primary2DAxisClick is pressed " + primary2dValue);
-
-            var xAxis = primary2dValue.x * speed * Time.deltaTime;
-            var zAxis = primary2dValue.y * speed * Time.deltaTime;
-
-            Vector3 right = transform.TransformDirection(Vector3.right);
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-
-            transform.position += right * xAxis;
-            transform.position += forward * zAxis;
-        }
-    }
-
-    private void UpdateJump(InputDevice controller)
-    {
-        isGrounded = (Physics.Raycast((new Vector2(transform.position.x, transform.position.y + 2.0f)), Vector3.down, 5.0f));
-
-        Debug.DrawRay((new Vector3(transform.position.x, transform.position.y, transform.position.z)), Vector3.down, Color.red, 1.0f);
-
-        if (!isGrounded && checkForGroundOnJump)
-            return;
-
-        bool buttonValue;
-
-        if (controller.TryGetFeatureValue(CommonUsages.primaryButton, out buttonValue) && buttonValue)
-        {
-            if (!buttonPressed)
+            current_speed -= brakingInterval;
+            if (current_speed < 0f)
             {
-                Debug.Log("primaryButton is pressed " + buttonValue);
-                buttonPressed = true;
-                rigidBodyComponent.AddForce(Vector3.up * jumpForce);
+                current_speed = 0f;
+            }
+            
+        } // Right trigger pull, accelerate to max speed
+        else if (RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerValue) && triggerValue)
+        {
+            current_speed += accelrateInterval;
+            if (current_speed > maxSpeed)
+            {
+                current_speed = maxSpeed;
             }
         }
-        else if (buttonPressed)
+        // Neither trigger, slow down at a slower rate
+        else
         {
-            Debug.Log("primaryButton is released " + buttonValue);
-            buttonPressed = false;
+            current_speed -= neutralInterval;
+            if (current_speed < 0f)
+            {
+                current_speed = 0f;
+            }
         }
+
+       transform.Translate(Vector3.forward * current_speed * Time.deltaTime);
+       transform.rotation = Quaternion.Euler(averageDirection.x * rotationSpeed, 0f, averageDirection.z * rotationSpeed);
+       //Camera.rotation = Quaternion.Euler(averageDirection.x * rotationSpeed, 0f, 0f);
+       //transform.Rotate(averageDirection * rotationSpeed * Time.deltaTime);
+
+
+        // Vector2 primary2dValue;
+
+        // InputFeatureUsage<Vector2> primary2DVector = CommonUsages.primary2DAxis;
+
+        // if (controller.TryGetFeatureValue(primary2DVector, out primary2dValue) && primary2dValue != Vector2.zero)
+        // {
+        //     Debug.Log("primary2DAxisClick is pressed " + primary2dValue);
+
+        //     var xAxis = primary2dValue.x * speed * Time.deltaTime;
+        //     var zAxis = primary2dValue.y * speed * Time.deltaTime;
+
+        //     Vector3 right = transform.TransformDirection(Vector3.right);
+        //     Vector3 forward = transform.TransformDirection(Vector3.forward);
+
+        //     transform.position += right * xAxis;
+        //     transform.position += forward * zAxis;
+        // }
     }
 }
