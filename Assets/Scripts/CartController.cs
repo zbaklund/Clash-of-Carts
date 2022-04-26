@@ -22,11 +22,16 @@ public class CartController : MonoBehaviour
 
     private InputDevice LeftController;
     private InputDevice RightController;
+    private bool detectedInputDevices = false;
 
 
     public void GetInput(){
-        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 rightPosition);
-        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 leftPosition);
+        bool r_success = RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 rightPosition);
+        bool l_success = LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 leftPosition);
+        if (!r_success || !l_success) {
+            Debug.Log("Lost Connection to Devices!");
+            detectedInputDevices = false;
+        }
         
         rightControllerZ = rightPosition.z;
         leftControllerZ = leftPosition.z;
@@ -82,6 +87,7 @@ public class CartController : MonoBehaviour
         {
             LeftController = leftHandDevices[0];
             Debug.Log(string.Format("Device name '{0}' with role '{1}'", LeftController.name, LeftController.characteristics.ToString()));
+            detectedInputDevices = true;
         }
         else if(leftHandDevices.Count > 1)
         {
@@ -91,25 +97,25 @@ public class CartController : MonoBehaviour
         var rightHandDevices = new List<UnityEngine.XR.InputDevice>();
         UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightHandDevices);
 
-        if(leftHandDevices.Count == 1)
+        if(rightHandDevices.Count == 1)
         {
             RightController = rightHandDevices[0];
             Debug.Log(string.Format("Device name '{0}' with role '{1}'", RightController.name, RightController.characteristics.ToString()));
         }
-        else if(leftHandDevices.Count > 1)
+        else if(rightHandDevices.Count > 1)
         {
             Debug.Log("Found more than one left hand!");
         }
     }
 
     private void FixedUpdate(){
-        if (LeftController == null || RightController == null){
+        if (!detectedInputDevices){
             GetDevices();
+        } else {
+            GetInput();
+            //Steer();
+            Accelerate();
         }
-
-        GetInput();
-        //Steer();
-        Accelerate();
     }
 
     
