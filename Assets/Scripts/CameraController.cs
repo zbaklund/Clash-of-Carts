@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     public void LookAtCart(){
         Vector3 lookDirection = objectToFollow.position - transform.position;
+        lookDirection.y = 0;
         Quaternion rot = Quaternion.LookRotation(lookDirection, Vector3.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, lookSpeed * Time.deltaTime);
     }

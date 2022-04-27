@@ -11,14 +11,17 @@ public class CartController : MonoBehaviour
     private float rightControllerZ;
     private float leftControllerZ;
     private float r_triggerValue;
-    private bool l_triggerValue;
+    private float l_triggerValue;
+    private bool r_pressed;
+    private bool l_pressed;
 
     public WheelCollider frontLeft, frontRight;
     public WheelCollider backLeft, backRight;
-    public float maxSteerAngle = 30;
-    public float motorforce = 10;
-    public float turnIntensity = 1;
-    public float acceleration = 0.5F;
+    public float maxSteerAngle = 30F;
+    public float motorforce = 10F;
+    public float turnIntensity = 1F;
+    public float acceleration = 1F;
+    public float brakeForce = 3F;
 
     private InputDevice LeftController;
     private InputDevice RightController;
@@ -39,64 +42,78 @@ public class CartController : MonoBehaviour
         leftControllerZ = leftPosition.z;
 
         
-        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out l_triggerValue);
+        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out l_pressed);
+        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out r_pressed);
+        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out l_triggerValue);
+        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out r_triggerValue);
     }
 
     public void Steer(){
         float diff_z = Math.Abs(rightControllerZ - leftControllerZ);
         steeringAngle = maxSteerAngle * (diff_z * turnIntensity);
+        if(rightControllerZ > leftControllerZ){
+            steeringAngle = -1.0F * steeringAngle;
+        }
         frontLeft.steerAngle = steeringAngle;
         frontRight.steerAngle = steeringAngle;
     }
 
-    public void Accelerate(){
-        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out r_triggerValue);
+    public void Accelerate(){        
+        if(l_pressed){
+            var cubeRenderer = cube.GetComponent<Renderer>();
+
+            //Call SetColor using the shader property name "_Color" and setting the color to red
+            cubeRenderer.material.SetColor("_Color", Color.blue);
+        }
+        
         if(r_triggerValue != 0){
             var cubeRenderer = cube.GetComponent<Renderer>();
 
             //Call SetColor using the shader property name "_Color" and setting the color to red
             cubeRenderer.material.SetColor("_Color", Color.red);
         }
-        if(Input.GetKeyDown("space")){
-            var cubeRenderer = cube.GetComponent<Renderer>();
 
-            //Call SetColor using the shader property name "_Color" and setting the color to red
-            cubeRenderer.material.SetColor("_Color", Color.red);
-        }
-        backLeft.motorTorque = r_triggerValue * motorforce;
-        backRight.motorTorque = r_triggerValue * motorforce;
-        // if(RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out r_triggerValue) && r_triggerValue){
-        //     backLeft.motorTorque += acceleration;
-        //     backRight.motorTorque += acceleration;
+        l_triggerValue = l_triggerValue * -1F;
+        float verticalInput = l_triggerValue + r_triggerValue;
+        backRight.motorTorque = -1.0F * verticalInput * motorforce;
+        backLeft.motorTorque = -1.0F * verticalInput * motorforce;
 
-        //     if(backLeft.motorTorque > motorforce){
-        //         backRight.motorTorque = motorforce;
-        //         backLeft.motorTorque = motorforce;
-        //     }
-        // }
-        if(l_triggerValue){
-            if(backLeft.motorTorque <= 0){
-                backLeft.motorTorque -= acceleration;
-                backRight.motorTorque -= acceleration;
-            }else{
-                backLeft.motorTorque = backLeft.motorTorque < 2 ? 0 : backLeft.motorTorque - 2;
-                backRight.motorTorque = backLeft.motorTorque;
-            }
-            var cubeRenderer = cube.GetComponent<Renderer>();
-
-            //Call SetColor using the shader property name "_Color" and setting the color to red
-            cubeRenderer.material.SetColor("_Color", Color.blue);
-        }
-        // }else if (r_triggerValue){
-        //     backLeft.motorTorque += acceleration;
-        //     backRight.motorTorque += acceleration;
-
-        //     if(backLeft.motorTorque > motorforce){
-        //         backRight.motorTorque = motorforce;
-        //         backLeft.motorTorque = motorforce;
-        //     }
-        // }
+        // if(l_pressed && r_pressed){
+        //     return;
         
+        // if(!l_pressed && !r_pressed){
+        //     backLeft.motorTorque -= acceleration;
+        //     backRight.motorTorque -= acceleration;
+        //     if(backLeft.motorTorque < 0){
+        //         backLeft.motorTorque = 0;
+        //     }
+        //     if(backRight.motorTorque < 0){
+        //         backRight.motorTorque = 0;
+        //     }
+        // }
+
+        // //scale torque up to the degree of trigger pull x max speed
+        // }else if(r_pressed){
+        //     backLeft.motorTorque += r_triggerValue * acceleration;
+        //     backRight.motorTorque += r_triggerValue * acceleration;
+        //     if(backLeft.motorTorque > r_triggerValue * motorforce){
+        //         backLeft.motorTorque = r_triggerValue * motorforce;
+        //     }
+        //     if(backRight.motorTorque > r_triggerValue * motorforce){
+        //         backRight.motorTorque = r_triggerValue *  motorforce;
+        //     }
+        
+        // //scale torque down to the degree of trigger pull x max speed
+        // }else if(l_pressed){
+        //     backLeft.motorTorque -= r_triggerValue * acceleration;
+        //     backRight.motorTorque -= r_triggerValue * acceleration;
+        //     if(backLeft.motorTorque < -1.0F * l_triggerValue * motorforce){
+        //         backLeft.motorTorque = -1.0F * l_triggerValue * motorforce;
+        //     }
+        //     if(backRight.motorTorque < -1.0F * l_triggerValue * motorforce){
+        //         backRight.motorTorque = -1.0F * l_triggerValue *  motorforce;
+        //     }
+        // }
     }
 
     private void GetDevices()
@@ -134,7 +151,7 @@ public class CartController : MonoBehaviour
             GetDevices();
         } else {
             GetInput();
-            //Steer();
+            Steer();
             Accelerate();
         }
     }
