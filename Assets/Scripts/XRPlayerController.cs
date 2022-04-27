@@ -74,10 +74,11 @@ public class XRPlayerController : MonoBehaviour
 
         //Debug.DrawRay(center, direction, Color.green, 1, false);
 
-        bool triggerValue;
+        bool triggerValue = true;
 
         if(RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out triggerValue) && triggerValue)
         {
+            Debug.Log("right trigger pressed");
             body.AddForceAtPosition(direction, body.transform.position);
         }
     }
