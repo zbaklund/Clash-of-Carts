@@ -10,7 +10,7 @@ public class CartController : MonoBehaviour
     private float steeringAngle;
     private float rightControllerZ;
     private float leftControllerZ;
-    private bool r_triggerValue;
+    private float r_triggerValue;
     private bool l_triggerValue;
 
     public WheelCollider frontLeft, frontRight;
@@ -22,6 +22,8 @@ public class CartController : MonoBehaviour
 
     private InputDevice LeftController;
     private InputDevice RightController;
+
+    public GameObject cube;
 
 
     public void GetInput(){
@@ -43,15 +45,30 @@ public class CartController : MonoBehaviour
     }
 
     public void Accelerate(){
-        if(RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out r_triggerValue) && r_triggerValue){
-            backLeft.motorTorque += acceleration;
-            backRight.motorTorque += acceleration;
+        RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out r_triggerValue);
+        if(r_triggerValue != 0){
+            var cubeRenderer = cube.GetComponent<Renderer>();
 
-            if(backLeft.motorTorque > motorforce){
-                backRight.motorTorque = motorforce;
-                backLeft.motorTorque = motorforce;
-            }
+            //Call SetColor using the shader property name "_Color" and setting the color to red
+            cubeRenderer.material.SetColor("_Color", Color.red);
         }
+        if(Input.GetKeyDown("space")){
+            var cubeRenderer = cube.GetComponent<Renderer>();
+
+            //Call SetColor using the shader property name "_Color" and setting the color to red
+            cubeRenderer.material.SetColor("_Color", Color.red);
+        }
+        backLeft.motorTorque = r_triggerValue * motorforce;
+        backRight.motorTorque = r_triggerValue * motorforce;
+        // if(RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out r_triggerValue) && r_triggerValue){
+        //     backLeft.motorTorque += acceleration;
+        //     backRight.motorTorque += acceleration;
+
+        //     if(backLeft.motorTorque > motorforce){
+        //         backRight.motorTorque = motorforce;
+        //         backLeft.motorTorque = motorforce;
+        //     }
+        // }
         if(l_triggerValue){
             if(backLeft.motorTorque <= 0){
                 backLeft.motorTorque -= acceleration;
@@ -60,6 +77,10 @@ public class CartController : MonoBehaviour
                 backLeft.motorTorque = backLeft.motorTorque < 2 ? 0 : backLeft.motorTorque - 2;
                 backRight.motorTorque = backLeft.motorTorque;
             }
+            var cubeRenderer = cube.GetComponent<Renderer>();
+
+            //Call SetColor using the shader property name "_Color" and setting the color to red
+            cubeRenderer.material.SetColor("_Color", Color.blue);
         }
         // }else if (r_triggerValue){
         //     backLeft.motorTorque += acceleration;
