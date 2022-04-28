@@ -6,21 +6,24 @@ using TMPro;
 
 public class HealthBar : MonoBehaviour
 {
-    public Slider slider;
-    public Image fill;
-    public TextMeshProUGUI text;
+    public RectTransform bar;
+    private float max_hp;
+    private float curr_hp;
 
     public void SetMaxHealth(float max_hp)
     {
-        slider.maxValue = max_hp;
-        slider.value = max_hp;
+        this.max_hp = max_hp;
+        curr_hp = max_hp;
+        bar.localScale = new Vector3(1f, 1f, 1f);
     }
 
     public void SetCurrHealth(float curr_hp)
     {
-        slider.value = curr_hp;
-        if(text){
-            text.text = "" + curr_hp + "/" + slider.maxValue;
-        }
+        this.curr_hp = curr_hp;
+        bar.localScale = new Vector3(this.curr_hp / this.max_hp, 1f, 1f);
+    }
+
+    void Update() {
+        // MAKE THE HEALTH BAR ALWAYS FACE THE PLAYER
     }
 }
