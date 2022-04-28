@@ -5,28 +5,37 @@ using UnityEngine;
 // Script for handling Health of gameobjects that have health.
 public class Health : MonoBehaviour
 {
-    public int health = 100;
+    public float health = 100;
     public HealthBar healthBar;
+    private string enemy_tag;
+
     void OnCollisionEnter(Collision col) {
-        if (true) { // Need to modify to be only happen on collision with player.
-            health -= 10;
-            healthBar.SetCurrHealth(health);
-            if (health == 0) {
-                Destroy(this.gameObject); // Change to signal death event.
-            } 
+        GameObject other = col.gameObject;
+        // First check if we are the one "attacking"
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2f)) {
+            Debug.Log("hit " + hit.collider.gameObject.name);
+            if (other.tag == enemy_tag) {
+                other.GetComponent<Health>().acceptDamage(10);
+            }
         }
     }
 
-    // // Eventually copy this into the playerController
-    // void updateInventory(PowerUpTypes type) {
-    //     if (type == PowerUpTypes.speedBoost) {
-    //         // Set speed boost
-    //     } else if (type == PowerUpTypes.invincible) {
-    //         // Set invincibility
-    //     }
-    // }
+    public void acceptDamage(float damage) {
+        health -= damage;
+        healthBar.SetCurrHealth(health);
+        if (health <= 0) {
+            Destroy(this.gameObject); // Change to signal death event.
+        } 
+    }
 
     void Start() {
+        if (this.gameObject.tag == "Enemy") {
+            enemy_tag = "Player";
+        } else {
+            enemy_tag = "Enemy";
+        }
         healthBar.SetMaxHealth(health);
     }
 
