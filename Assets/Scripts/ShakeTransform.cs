@@ -20,7 +20,7 @@ public class ShakeTransform : MonoBehaviour
 	private void Awake()
 	{
 		_startPos = transform.position;
-		Invoke("BeginShake", (Random.Range(0, 10)));
+		// Invoke("BeginShake", (Random.Range(0, 10)));
 	}
 
 	private void OnValidate()

@@ -8,6 +8,7 @@ public class PlayerNavmesh : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     [SerializeField] private Transform target;
     // Start is called before the first frame update
+    
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();   

@@ -27,8 +27,6 @@ public class CartController : MonoBehaviour
     private InputDevice RightController;
     private bool detectedInputDevices = false;
 
-    public GameObject cube;
-
 
     public void GetInput(){
         bool r_success = RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 rightPosition);
@@ -59,19 +57,6 @@ public class CartController : MonoBehaviour
     }
 
     public void Accelerate(){        
-        if(l_pressed){
-            var cubeRenderer = cube.GetComponent<Renderer>();
-
-            //Call SetColor using the shader property name "_Color" and setting the color to red
-            cubeRenderer.material.SetColor("_Color", Color.blue);
-        }
-        
-        if(r_triggerValue != 0){
-            var cubeRenderer = cube.GetComponent<Renderer>();
-
-            //Call SetColor using the shader property name "_Color" and setting the color to red
-            cubeRenderer.material.SetColor("_Color", Color.red);
-        }
 
         l_triggerValue = l_triggerValue * -1F;
         float verticalInput = l_triggerValue + r_triggerValue;
