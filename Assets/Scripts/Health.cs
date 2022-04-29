@@ -5,7 +5,7 @@ using UnityEngine;
 // Script for handling Health of gameobjects that have health.
 public class Health : MonoBehaviour
 {
-    public float health = 100;
+    public float health;
     public HealthBar healthBar;
     private string enemy_tag;
     private bool spawned = false;

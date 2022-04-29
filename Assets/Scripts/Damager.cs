@@ -13,7 +13,7 @@ public class Damager : MonoBehaviour
             Debug.Log("Hit player");
             other.GetComponent<Health>().acceptDamage(10);
         } else if (other.tag == "Enemy") {
-            Debug.Log("Hit player");
+            Debug.Log("Hit enemy");
             other.GetComponent<Health>().acceptDamage(10);
         }
     }

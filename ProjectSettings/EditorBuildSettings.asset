@@ -5,15 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/proto-map.unity
+    guid: cafe8c9e399165249a0bc772af090919
   - enabled: 0
     path: Assets/FoodAndGrocery/ExamplesScene/ExampleScene.unity
     guid: 8099fd5ca2020e847be72ce40aacbc49
   - enabled: 0
     path: Assets/Scenes/motion_sandbox.unity
     guid: 6f358aaf86bd62a5b8aa649877eb469f
-  - enabled: 1
-    path: Assets/Scenes/proto-map.unity
-    guid: cafe8c9e399165249a0bc772af090919
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: c43457555a9573b458982690875cdd61, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 64ff22cf4a361c74bbc41d00d6e66d5c, type: 2}
