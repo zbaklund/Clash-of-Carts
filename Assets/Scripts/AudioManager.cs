@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     public static AudioManager instance;
+
+    private Sound currentSound;
     
     // Start is called before the first frame update
     void Awake()
@@ -35,9 +37,18 @@ public class AudioManager : MonoBehaviour
         Play("World");
     }
 
+    public void changeVolume(float value){
+        currentSound.volume = value;
+    }
+
+    public Sound getCurrentSound(){
+        return currentSound;
+    }
+
     // use attach: FindObjectOfType<AudioManager>().Play("sound.name");
     public void Play (string name){
         Sound s = Array.Find(sounds, sound => sound.name == name);
+        currentSound = s;
 
         if (s == null){
             Debug.LogWarning("Sound: " + name + " not found");
