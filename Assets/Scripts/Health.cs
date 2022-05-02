@@ -59,6 +59,7 @@ public class Health : MonoBehaviour
         
         Rigidbody rb = this.gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
+        rb.mass = 1f;
         Vector3 dir = Random.onUnitSphere;
         dir.y = 1;
         rb.AddForceAtPosition(dir * 100, transform.position +  new Vector3(1, 1, 1));
