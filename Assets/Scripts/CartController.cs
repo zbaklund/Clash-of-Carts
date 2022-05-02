@@ -20,8 +20,6 @@ public class CartController : MonoBehaviour
     public float maxSteerAngle;
     public float motorforce;
     public float turnIntensity;
-    public float acceleration;
-    public float brakeForce;
 
     private InputDevice LeftController;
     private InputDevice RightController;
@@ -62,43 +60,6 @@ public class CartController : MonoBehaviour
         float verticalInput = l_triggerValue + r_triggerValue;
         backRight.motorTorque = -1.0F * verticalInput * motorforce;
         backLeft.motorTorque = -1.0F * verticalInput * motorforce;
-
-        // if(l_pressed && r_pressed){
-        //     return;
-        
-        // if(!l_pressed && !r_pressed){
-        //     backLeft.motorTorque -= acceleration;
-        //     backRight.motorTorque -= acceleration;
-        //     if(backLeft.motorTorque < 0){
-        //         backLeft.motorTorque = 0;
-        //     }
-        //     if(backRight.motorTorque < 0){
-        //         backRight.motorTorque = 0;
-        //     }
-        // }
-
-        // //scale torque up to the degree of trigger pull x max speed
-        // }else if(r_pressed){
-        //     backLeft.motorTorque += r_triggerValue * acceleration;
-        //     backRight.motorTorque += r_triggerValue * acceleration;
-        //     if(backLeft.motorTorque > r_triggerValue * motorforce){
-        //         backLeft.motorTorque = r_triggerValue * motorforce;
-        //     }
-        //     if(backRight.motorTorque > r_triggerValue * motorforce){
-        //         backRight.motorTorque = r_triggerValue *  motorforce;
-        //     }
-        
-        // //scale torque down to the degree of trigger pull x max speed
-        // }else if(l_pressed){
-        //     backLeft.motorTorque -= r_triggerValue * acceleration;
-        //     backRight.motorTorque -= r_triggerValue * acceleration;
-        //     if(backLeft.motorTorque < -1.0F * l_triggerValue * motorforce){
-        //         backLeft.motorTorque = -1.0F * l_triggerValue * motorforce;
-        //     }
-        //     if(backRight.motorTorque < -1.0F * l_triggerValue * motorforce){
-        //         backRight.motorTorque = -1.0F * l_triggerValue *  motorforce;
-        //     }
-        // }
     }
 
     private void GetDevices()
