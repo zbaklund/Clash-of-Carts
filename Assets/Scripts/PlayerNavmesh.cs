@@ -6,17 +6,30 @@ using UnityEngine.AI;
 public class PlayerNavmesh : MonoBehaviour
 {
     private NavMeshAgent navMeshAgent;
-    [SerializeField] private Transform target;
+    private Vector3 spawn_position;
+    private Transform player_transform;
+    private string target;
     // Start is called before the first frame update
     
     void Awake()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();   
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        spawn_position = transform.position;
+        player_transform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        target = "Player";
+    }
+
+    public void setTarget(string tar) {
+        target = tar;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        navMeshAgent.destination = target.position;
+    {   
+        if (target == "Player") {
+            navMeshAgent.destination = player_transform.position;
+        } else {
+            navMeshAgent.destination = spawn_position;
+        }
     }
 }

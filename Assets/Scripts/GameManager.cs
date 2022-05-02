@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject enemy_parent;
     private int num_enemeies = 0;
+    private int round_num;
+    public GameObject spawn_locations;
     Subscription<EnemyDeathEvent> e_death;
     Subscription<PlayerDeathEvent> p_death;
     Subscription<EnemySpawnEvent> e_spawn;
@@ -16,6 +18,7 @@ public class GameManager : MonoBehaviour
         e_death = EventBus.Subscribe<EnemyDeathEvent>(_enemyDeath);
         e_spawn = EventBus.Subscribe<EnemySpawnEvent>(_enemySpawn);
         p_death = EventBus.Subscribe<PlayerDeathEvent>(_playerDeath);
+        round_num = 0;
     }
 
     // Update is called once per frame

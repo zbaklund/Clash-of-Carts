@@ -1381,9 +1381,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3233905312018459103}
   - component: {fileID: 5603929560327013303}
-  - component: {fileID: 5042011758940913437}
   m_Layer: 0
-  m_Name: shoppingcart
+  m_Name: EnemyCart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1417,23 +1416,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2858364179850179429}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 9, z: 1}
-  m_Center: {x: 0, y: 0, z: -9.73}
---- !u!114 &5042011758940913437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2858364179850179429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6368835467a53f64ea6908fec4d3a84d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Size: {x: 7, y: 9, z: 14}
+  m_Center: {x: 0, y: 0, z: -2.1}
 --- !u!1 &2879667902441855610
 GameObject:
   m_ObjectHideFlags: 0
@@ -3132,7 +3119,8 @@ GameObject:
   - component: {fileID: 8199134750153522728}
   - component: {fileID: 8199134750153522724}
   - component: {fileID: 8199134750153522731}
-  - component: {fileID: 3135025454039378612}
+  - component: {fileID: 45628549199713557}
+  - component: {fileID: 1334540295792479991}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -3165,11 +3153,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8199134750153522735}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 9, z: 14}
-  m_Center: {x: 0, y: 0, z: 2}
+  m_Size: {x: 7, y: 9, z: 1}
+  m_Center: {x: 0, y: 0, z: 9.91}
 --- !u!54 &8199134750153522728
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3198,7 +3186,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c73a695733e9646829b74052bb886f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!195 &8199134750153522731
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3221,7 +3208,19 @@ NavMeshAgent:
   m_BaseOffset: 4
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3135025454039378612
+--- !u!114 &45628549199713557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8199134750153522735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6368835467a53f64ea6908fec4d3a84d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1334540295792479991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
