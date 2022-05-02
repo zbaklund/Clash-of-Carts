@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIUpdater : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class UIUpdater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyCountSub = EventBus.Subscribe<ChangeEnemyCount>(_updateText);
-        tmp.SetText(text_to_display + enemy_parent.transform.childCount.ToString());
+        if (SceneManager.GetActiveScene().buildIndex != 0) {
+            enemyCountSub = EventBus.Subscribe<ChangeEnemyCount>(_updateText);
+            tmp.SetText(text_to_display + enemy_parent.transform.childCount.ToString());
+        }
     }
 
     // Update is called once per frame
