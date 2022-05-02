@@ -17,11 +17,11 @@ public class CartController : MonoBehaviour
 
     public WheelCollider frontLeft, frontRight;
     public WheelCollider backLeft, backRight;
-    public float maxSteerAngle = 30F;
-    public float motorforce = 10F;
-    public float turnIntensity = 1F;
-    public float acceleration = 1F;
-    public float brakeForce = 3F;
+    public float maxSteerAngle;
+    public float motorforce;
+    public float turnIntensity;
+    public float acceleration;
+    public float brakeForce;
 
     private InputDevice LeftController;
     private InputDevice RightController;

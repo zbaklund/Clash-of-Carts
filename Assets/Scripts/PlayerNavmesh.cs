@@ -7,7 +7,7 @@ public class PlayerNavmesh : MonoBehaviour
 {
     private NavMeshAgent navMeshAgent;
     private Vector3 spawn_position;
-    private Transform player_transform;
+    public Transform player_transform;
     private string target;
     // Start is called before the first frame update
     
@@ -15,7 +15,7 @@ public class PlayerNavmesh : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         spawn_position = transform.position;
-        player_transform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        player_transform = GameObject.FindGameObjectsWithTag("Player")[0].transform.Find("PlayerCart").transform;
         target = "Player";
     }
 

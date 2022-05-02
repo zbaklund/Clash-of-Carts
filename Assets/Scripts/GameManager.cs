@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     public GameObject enemy_parent;
     private int num_enemeies = 0;
     private int round_num;
-    public GameObject spawn_locations;
+    public GameObject enemy_prefab;
+    public GameObject spawn_location_parent;
+    private GameObject[] spawn_locations;
     Subscription<EnemyDeathEvent> e_death;
     Subscription<PlayerDeathEvent> p_death;
     Subscription<EnemySpawnEvent> e_spawn;
@@ -18,26 +20,34 @@ public class GameManager : MonoBehaviour
         e_death = EventBus.Subscribe<EnemyDeathEvent>(_enemyDeath);
         e_spawn = EventBus.Subscribe<EnemySpawnEvent>(_enemySpawn);
         p_death = EventBus.Subscribe<PlayerDeathEvent>(_playerDeath);
-        round_num = 0;
+        round_num = 1;
+        spawn_locations = new GameObject[spawn_location_parent.transform.childCount];
+        for (int i = 0; i < spawn_locations.Length; ++i) {
+            spawn_locations[i] = spawn_location_parent.transform.GetChild(i).gameObject;
+        }
+        beginRound();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void beginRound() {
+        for (int i = 0; i < round_num; ++i) { // spawn as many enemies as the round number
+            GameObject enemy = Instantiate(enemy_prefab, spawn_locations[i].transform.position, Quaternion.identity);
+            enemy.transform.parent = enemy_parent.transform;
+        }
     }
 
     void _enemyDeath(EnemyDeathEvent e) {
         num_enemeies -= 1;
         EventBus.Publish<ChangeEnemyCount>(new ChangeEnemyCount(num_enemeies));
         if (num_enemeies == 0) {
-            // Next round? Game Over?
+            ++round_num;
+            beginRound();
         }
     }
 
     void _enemySpawn(EnemySpawnEvent e) {
         Debug.Log("Adding enemies");
         num_enemeies += 1;
+        EventBus.Publish<ChangeEnemyCount>(new ChangeEnemyCount(num_enemeies));
     }
 
     void _playerDeath(PlayerDeathEvent e) {
