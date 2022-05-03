@@ -6,15 +6,20 @@ using UnityEngine.UI;
 
 class SliderController : MonoBehaviour
 {
+    public AudioSource audio;
+    private float musicVolume = 0.6f;
     public Slider slider;
-    public AudioManager audio;
 
     private void Start() {
-        slider.value = audio.getCurrentSound().volume;
+        audio.Play();
     }
 
     public void changeVolume(){
-        audio.changeVolume(slider.value);
+        audio.volume = musicVolume;
+    }
+
+    public void updateVolume(){
+        musicVolume = slider.value;
     }
 
 }
