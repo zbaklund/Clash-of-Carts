@@ -10,10 +10,13 @@ public class Health : MonoBehaviour
     public HealthBar healthBar;
     private string enemy_tag;
     private bool spawned = false;
+    private bool is_invincible = false;
     [SerializeField] private GameObject cart;
 
     public void acceptDamage(float damage) {
-        health -= damage;
+        if (!is_invincible) {
+            health -= damage;
+        }
         if (this.gameObject.tag == "Enemy") {
             healthBar.SetCurrHealth(health);
         }
