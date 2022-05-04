@@ -63,4 +63,5 @@ crashlytics-build.properties
 # [Aa]ssets/XR
 # [Aa]ssets/Samples
 
-UserSettings
+UserSettings/
+Assets/XR/Settings/OpenXR\ Package\ Settings*
