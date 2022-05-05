@@ -16,7 +16,7 @@ public class ColorShift : MonoBehaviour
         lt = GetComponent<Light>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // set light color
         float t = Mathf.PingPong(Time.time, duration) / duration;

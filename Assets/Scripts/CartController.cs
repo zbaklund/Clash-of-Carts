@@ -14,12 +14,16 @@ public class CartController : MonoBehaviour
     private float l_triggerValue;
     private bool r_pressed;
     private bool l_pressed;
+    private bool menu_pressed;
+    public static bool gameIsPaused = false;
+    private long lastPause;
 
     public WheelCollider frontLeft, frontRight;
     public WheelCollider backLeft, backRight;
     public float maxSteerAngle;
     public float motorforce;
     public float turnIntensity;
+    public GameObject canvas;
 
     private InputDevice LeftController;
     private InputDevice RightController;
@@ -42,6 +46,7 @@ public class CartController : MonoBehaviour
         RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out r_pressed);
         LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out l_triggerValue);
         RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out r_triggerValue);
+        LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out menu_pressed);
     }
 
     public void Steer(){
@@ -60,6 +65,20 @@ public class CartController : MonoBehaviour
         float verticalInput = l_triggerValue + r_triggerValue;
         backRight.motorTorque = -1.0F * verticalInput * motorforce;
         backLeft.motorTorque = -1.0F * verticalInput * motorforce;
+    }
+
+    private void Pause(){
+        // canvas.SetActive(true);
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+        lastPause = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
+    private void Resume(){
+        // canvas.SetActive(false);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+        lastPause = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
 
     private void GetDevices()
@@ -92,16 +111,30 @@ public class CartController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate(){
+    private void Update(){
         if (!detectedInputDevices){
             GetDevices();
         } else {
             GetInput();
+            if(menu_pressed){
+                 if((DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - lastPause > 20){
+                    if(gameIsPaused){
+                        Resume();
+                    }else{
+                    
+                        Pause();
+                    }            
+                }
+            }
+        }
+    }
+
+    private void FixedUpdate(){
+        if(!gameIsPaused){
             Steer();
             Accelerate();
         }
     }
-
     
 
 }

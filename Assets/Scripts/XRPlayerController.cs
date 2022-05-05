@@ -48,7 +48,7 @@ public class XRPlayerController : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (LeftController == null || RightController == null)
         {
