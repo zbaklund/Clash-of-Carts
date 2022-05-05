@@ -13,9 +13,7 @@ public class UIUpdater : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (enemy_parent == null) {
-            enemy_parent = GameObject.FindGameObjectWithTag("EnemyParent");
-        }
+        enemy_parent = GameObject.FindGameObjectWithTag("EnemyParent");
         if (SceneManager.GetActiveScene().buildIndex != 0) {
             enemyCountSub = EventBus.Subscribe<ChangeEnemyCount>(_updateText);
             tmp.SetText(text_to_display + enemy_parent.transform.childCount.ToString());
