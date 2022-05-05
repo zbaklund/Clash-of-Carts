@@ -10,15 +10,21 @@ public class Health : MonoBehaviour
     public HealthBar healthBar;
     private string enemy_tag;
     private bool spawned = false;
-    private bool is_invincible = false;
+    public bool is_invincible = false;
+    private Subscription<GrabbedInvincibilityEvent> inv_event;
     [SerializeField] private GameObject cart;
 
     public void acceptDamage(float damage) {
         if (!is_invincible) {
             health -= damage;
+        } else {
+            return;
         }
+
         if (this.gameObject.tag == "Enemy") {
             healthBar.SetCurrHealth(health);
+        } else {
+            EventBus.Publish<PlayerHitEvent>(new PlayerHitEvent());
         }
 
         if (health <= 0) {
@@ -44,12 +50,23 @@ public class Health : MonoBehaviour
         }
     }
     void Start() {
+        inv_event = EventBus.Subscribe<GrabbedInvincibilityEvent>(_setInvHelper);
         if (this.gameObject.tag == "Enemy") {
             enemy_tag = "Player";
             healthBar.SetMaxHealth(health);
         } else {
             enemy_tag = "Enemy";
         }
+    }
+
+    void _setInvHelper(GrabbedInvincibilityEvent e) {
+        StartCoroutine(_setInv());
+    }
+
+    private IEnumerator _setInv() {
+        is_invincible = true;
+        yield return new WaitForSeconds(5f);
+        is_invincible = false;
     }
 
     void deathFunction() {

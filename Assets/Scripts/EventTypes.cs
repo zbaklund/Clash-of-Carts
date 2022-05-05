@@ -26,3 +26,11 @@ public class EnemySpawnEvent {
 public class PlayerDieEvent {
     
 }
+
+public class GrabbedInvincibilityEvent {
+
+}
+
+public class PlayerHitEvent {
+    
+}

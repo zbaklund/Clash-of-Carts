@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 934612246845628129}
+  - component: {fileID: 1308025621258422050}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -33,6 +34,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -16.61, y: 0, z: 0}
+--- !u!114 &1308025621258422050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176099122850311671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d7d2b95ae44fb4497d67637efd9c5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cube_ren: {fileID: 6836048863401898649}
+  ball_ren: {fileID: 3610327436496790022}
 --- !u!1 &852222756438993081
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,7 +57,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3658444962204950299}
-  - component: {fileID: 4967033104547648334}
+  - component: {fileID: 3158097347796539686}
   m_Layer: 5
   m_Name: TextManager
   m_TagString: Untagged
@@ -69,7 +84,7 @@ RectTransform:
   m_AnchoredPosition: {x: 74.373924, y: -28.627563}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4967033104547648334
+--- !u!114 &3158097347796539686
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,11 +93,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 852222756438993081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b63865c2512769f47a40ff722dcb64d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 4940224d06d0c344c9b66375d75a8287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   tmp: {fileID: 7341892531450723941}
-  enemy_parent: {fileID: 0}
 --- !u!1 &882958130905477074
 GameObject:
   m_ObjectHideFlags: 0
